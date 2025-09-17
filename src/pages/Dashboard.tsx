@@ -26,16 +26,16 @@ const Dashboard = () => {
       id: "trash-collector",
       title: "Trash Collector",
       description: "Sort waste into the right bins and save the environment!",
-      icon: <Trash2 className="w-16 h-16 text-white" />,
+      icon: <Trash2 className="w-16 h-16 text-primary" />,
       difficulty: "Easy" as const,
       points: 50,
       path: "/games/trash-collector"
     },
     {
       id: "solar-builder",
-      title: "Solar Panel Builder",
+      title: "Solar Panel Builder", 
       description: "Build solar panels and power up the city with clean energy!",
-      icon: <Sun className="w-16 h-16 text-white" />,
+      icon: <Sun className="w-16 h-16 text-primary" />,
       difficulty: "Medium" as const,
       points: 100,
       path: "/games/solar-builder"
@@ -44,7 +44,7 @@ const Dashboard = () => {
       id: "eco-quiz",
       title: "Eco Quiz Adventure",
       description: "Test your environmental knowledge and become an eco-expert!",
-      icon: <Brain className="w-16 h-16 text-white" />,
+      icon: <Brain className="w-16 h-16 text-primary" />,
       difficulty: "Easy" as const,
       points: 75,
       path: "/games/eco-quiz"
@@ -53,7 +53,7 @@ const Dashboard = () => {
       id: "water-saver",
       title: "Water Saver",
       description: "Stop water waste and become a conservation hero!",
-      icon: <Droplets className="w-16 h-16 text-white" />,
+      icon: <Droplets className="w-16 h-16 text-primary" />,
       difficulty: "Medium" as const,
       points: 80,
       path: "/games/water-saver"
@@ -62,7 +62,7 @@ const Dashboard = () => {
       id: "carbon-runner",
       title: "Carbon Runner",
       description: "Run through a green world while avoiding pollution!",
-      icon: <Gamepad2 className="w-16 h-16 text-white" />,
+      icon: <Gamepad2 className="w-16 h-16 text-primary" />,
       difficulty: "Hard" as const,
       points: 120,
       path: "/games/carbon-runner"
@@ -71,7 +71,7 @@ const Dashboard = () => {
       id: "climate-defender",
       title: "Climate Defender",
       description: "Match eco-symbols and defend our planet!",
-      icon: <Zap className="w-16 h-16 text-white" />,
+      icon: <Zap className="w-16 h-16 text-primary" />,
       difficulty: "Medium" as const,
       points: 90,
       path: "/games/climate-defender"
@@ -137,9 +137,9 @@ const Dashboard = () => {
     return () => clearInterval(interval);
   }, []);
 
-  // Calculate progress to next level
-  const progressToNext = (userPoints % 100);
-  const nextLevelPoints = Math.ceil(userPoints / 100) * 100;
+  // Calculate progress to next level (start at level 1)
+  const currentLevel = Math.floor(userPoints / 100) + 1;
+  const progressToNext = userPoints % 100;
 
   return (
     <div className="min-h-screen bg-background">
@@ -173,7 +173,7 @@ const Dashboard = () => {
           {/* Progress Bar */}
           <div className="max-w-md mx-auto mb-8">
             <div className="flex justify-between text-sm text-muted-foreground mb-2">
-              <span>Level {Math.floor(userPoints / 100) + 1}</span>
+              <span>Level {currentLevel}</span>
               <span>{progressToNext}/100 to next level</span>
             </div>
             <Progress value={progressToNext} className="h-3" />

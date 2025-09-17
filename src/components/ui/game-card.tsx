@@ -43,12 +43,12 @@ export const GameCard = ({
         </div>
 
         {/* Title */}
-        <h3 className="text-2xl font-bold text-center mb-2 text-white">
+        <h3 className="text-2xl font-bold text-center mb-2 text-foreground">
           {title}
         </h3>
 
         {/* Description */}
-        <p className="text-center text-white/90 mb-4 flex-grow">
+        <p className="text-center text-muted-foreground mb-4 flex-grow">
           {description}
         </p>
 
@@ -57,14 +57,14 @@ export const GameCard = ({
           <span className={`font-semibold ${difficultyColors[difficulty]}`}>
             {difficulty}
           </span>
-          <span className="text-white font-bold">
+          <span className="text-foreground font-bold">
             +{points} pts
           </span>
         </div>
 
         {/* Play Button */}
         <Button
-          className="btn-game w-full text-white"
+          className="btn-game w-full"
           disabled={isLocked}
           onClick={(e) => {
             e.stopPropagation();

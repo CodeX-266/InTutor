@@ -41,7 +41,11 @@ export const Header = ({ userPoints, userName }: HeaderProps) => {
           </div>
 
           {/* Settings */}
-          <Button variant="ghost" size="icon">
+          <Button 
+            variant="ghost" 
+            size="icon"
+            onClick={() => alert("Settings menu coming soon! Connect to Supabase for user preferences.")}
+          >
             <Settings className="w-5 h-5" />
           </Button>
         </div>
