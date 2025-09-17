@@ -7,14 +7,34 @@ import { useNavigate } from "react-router-dom";
 import { EarthMascot } from "@/components/mascot/EarthMascot";
 import { ArrowLeft, Mail, Lock } from "lucide-react";
 
+import { auth } from "@/firebase"; // make sure this points to your firebase.ts
+import { signInWithEmailAndPassword } from "firebase/auth";
+import { useState } from "react";
+
 const LoginPage = () => {
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
 
-  const handleLogin = (e: React.FormEvent) => {
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-    // For now, just navigate to dashboard
-    // This will be connected to Supabase authentication
-    navigate("/dashboard");
+    const target = e.target as typeof e.target & {
+      email: { value: string };
+      password: { value: string };
+    };
+
+    const email = target.email.value;
+    const password = target.password.value;
+
+    setLoading(true);
+    try {
+      await signInWithEmailAndPassword(auth, email, password);
+      navigate("/dashboard");
+    } catch (error: any) {
+      console.error(error);
+      alert(error.message);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -47,7 +67,7 @@ const LoginPage = () => {
               Sign in to continue your eco-learning journey
             </p>
           </CardHeader>
-          
+
           <CardContent className="space-y-6">
             <form onSubmit={handleLogin} className="space-y-4">
               <div className="space-y-2">
@@ -65,7 +85,7 @@ const LoginPage = () => {
                   />
                 </div>
               </div>
-              
+
               <div className="space-y-2">
                 <Label htmlFor="password" className="text-green-700 font-medium">
                   Password
@@ -81,15 +101,16 @@ const LoginPage = () => {
                   />
                 </div>
               </div>
-              
+
               <Button
                 type="submit"
                 className="w-full bg-green-600 hover:bg-green-700 text-white font-semibold py-3"
+                disabled={loading}
               >
-                Sign In 🌱
+                {loading ? "Signing In..." : "Sign In 🌱"}
               </Button>
             </form>
-            
+
             <div className="text-center space-y-4">
               <p className="text-sm text-muted-foreground">
                 Don't have an account?{" "}
@@ -100,7 +121,7 @@ const LoginPage = () => {
                   Sign up here
                 </button>
               </p>
-              
+
               <div className="bg-blue-50 p-4 rounded-lg border border-blue-200">
                 <p className="text-sm text-blue-700">
                   <strong>Demo Access:</strong> Click "Sign In" with any email to try the demo!

@@ -8,14 +8,56 @@ import { useNavigate } from "react-router-dom";
 import { EarthMascot } from "@/components/mascot/EarthMascot";
 import { ArrowLeft, Mail, Lock, User, School } from "lucide-react";
 
+import { auth } from "@/firebase";
+import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
+import { useState } from "react";
+
 const SignupPage = () => {
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
+  const [role, setRole] = useState(""); // Track selected role
 
-  const handleSignup = (e: React.FormEvent) => {
+  const handleSignup = async (e: React.FormEvent) => {
     e.preventDefault();
-    // For now, just navigate to dashboard
-    // This will be connected to Supabase authentication
-    navigate("/dashboard");
+
+    const target = e.target as typeof e.target & {
+      name: { value: string };
+      email: { value: string };
+      password: { value: string };
+      school: { value: string };
+    };
+
+    const name = target.name.value;
+    const email = target.email.value;
+    const password = target.password.value;
+    const school = target.school?.value || "";
+
+    if (!role) {
+      alert("Please select your role");
+      return;
+    }
+
+    setLoading(true);
+    try {
+      // Firebase Auth: create user
+      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+
+      // Update displayName
+      if (userCredential.user) {
+        await updateProfile(userCredential.user, {
+          displayName: name,
+        });
+      }
+
+      // Optional: save role, school to Firestore here
+
+      navigate("/dashboard");
+    } catch (error: any) {
+      console.error(error);
+      alert(error.message);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -48,9 +90,10 @@ const SignupPage = () => {
               Start your journey to becoming an eco-hero
             </p>
           </CardHeader>
-          
+
           <CardContent className="space-y-6">
             <form onSubmit={handleSignup} className="space-y-4">
+              {/* Full Name */}
               <div className="space-y-2">
                 <Label htmlFor="name" className="text-green-700 font-medium">
                   Full Name
@@ -66,7 +109,8 @@ const SignupPage = () => {
                   />
                 </div>
               </div>
-              
+
+              {/* Email */}
               <div className="space-y-2">
                 <Label htmlFor="email" className="text-green-700 font-medium">
                   Email
@@ -82,7 +126,8 @@ const SignupPage = () => {
                   />
                 </div>
               </div>
-              
+
+              {/* Password */}
               <div className="space-y-2">
                 <Label htmlFor="password" className="text-green-700 font-medium">
                   Password
@@ -98,12 +143,13 @@ const SignupPage = () => {
                   />
                 </div>
               </div>
-              
+
+              {/* Role */}
               <div className="space-y-2">
                 <Label htmlFor="role" className="text-green-700 font-medium">
                   I am a...
                 </Label>
-                <Select required>
+                <Select defaultValue="" onValueChange={(value) => setRole(value)}>
                   <SelectTrigger className="border-green-200 focus:border-green-500">
                     <SelectValue placeholder="Select your role" />
                   </SelectTrigger>
@@ -113,7 +159,8 @@ const SignupPage = () => {
                   </SelectContent>
                 </Select>
               </div>
-              
+
+              {/* School */}
               <div className="space-y-2">
                 <Label htmlFor="school" className="text-green-700 font-medium">
                   School (Optional)
@@ -128,15 +175,18 @@ const SignupPage = () => {
                   />
                 </div>
               </div>
-              
+
+              {/* Submit */}
               <Button
                 type="submit"
                 className="w-full bg-green-600 hover:bg-green-700 text-white font-semibold py-3"
+                disabled={loading}
               >
-                Create Account 🌍
+                {loading ? "Creating Account..." : "Create Account 🌍"}
               </Button>
             </form>
-            
+
+            {/* Sign In Link & Demo */}
             <div className="text-center space-y-4">
               <p className="text-sm text-muted-foreground">
                 Already have an account?{" "}
@@ -147,7 +197,7 @@ const SignupPage = () => {
                   Sign in here
                 </button>
               </p>
-              
+
               <div className="bg-blue-50 p-4 rounded-lg border border-blue-200">
                 <p className="text-sm text-blue-700">
                   <strong>Demo Access:</strong> Click "Create Account" to try the demo instantly!
