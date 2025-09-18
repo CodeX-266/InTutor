@@ -37,7 +37,15 @@ export const Header = ({ userPoints, userName }: HeaderProps) => {
             whileHover={{ scale: 1.05 }}
           >
             <Trophy className="w-5 h-5 text-green-400" />
-            <span className="font-semibold text-green-400">{userPoints} pts</span>
+            <motion.span
+              key={userPoints} // animate whenever points change
+              initial={{ scale: 0.8 }}
+              animate={{ scale: 1 }}
+              transition={{ type: "spring", stiffness: 300 }}
+              className="font-semibold text-green-400"
+            >
+              {userPoints} pts
+            </motion.span>
           </motion.div>
 
           {/* User Info */}
@@ -46,7 +54,7 @@ export const Header = ({ userPoints, userName }: HeaderProps) => {
             whileHover={{ scale: 1.03 }}
           >
             <User className="w-5 h-5 text-gray-200" />
-            <span className="font-medium text-gray-200">{"Adarsh"}</span>
+            <span className="font-medium text-gray-200">{userName}</span>
           </motion.div>
 
           {/* Settings */}
@@ -54,11 +62,7 @@ export const Header = ({ userPoints, userName }: HeaderProps) => {
             variant="ghost"
             size="icon"
             className="text-gray-200 hover:text-green-400 hover:bg-gray-800/50 transition-all rounded-full"
-            onClick={() =>
-              alert(
-                "Settings menu coming soon!"
-              )
-            }
+            onClick={() => alert("Settings menu coming soon!")}
           >
             <Settings className="w-5 h-5" />
           </Button>
