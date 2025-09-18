@@ -93,7 +93,7 @@ export default function FriendsPage() {
     toast.error("Friend request rejected");
   };
 
-  // 🔹 Listen to friends and their points for leaderboard
+  // 🔹 Listen to friends (Firestore) but assign random points for display
   useEffect(() => {
     if (!user) return;
 
@@ -108,8 +108,6 @@ export default function FriendsPage() {
           );
           const snap = await getDocs(friendsQuery);
           const friendsData = snap.docs.map((d) => d.data());
-          // Sort by points descending
-          friendsData.sort((a, b) => (b.points || 0) - (a.points || 0));
           setFriends(friendsData);
         } else {
           setFriends([]);
@@ -186,18 +184,21 @@ export default function FriendsPage() {
             <p className="text-white">You don’t have friends yet 😢</p>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {friends.map((f, idx) => (
-                <motion.div
-                  key={f.uid}
-                  initial={{ scale: 0.8, opacity: 0 }}
-                  animate={{ scale: 1, opacity: 1 }}
-                  className="p-4 bg-black/30 rounded-lg text-center border border-white/20 hover:bg-yellow-400 hover:text-black transition-all cursor-pointer"
-                >
-                  <p className="font-semibold text-white">{idx + 1}. {f.name}</p>
-                  <p className="text-sm text-white/70">{f.email}</p>
-                  <p className="text-sm font-bold text-green-400">{f.points || 0} pts</p>
-                </motion.div>
-              ))}
+              {friends.map((f, idx) => {
+                const randomPoints = Math.floor(Math.random() * 1000); // Random points
+                return (
+                  <motion.div
+                    key={f.uid}
+                    initial={{ scale: 0.8, opacity: 0 }}
+                    animate={{ scale: 1, opacity: 1 }}
+                    className="p-4 bg-black/30 rounded-lg text-center border border-white/20 hover:bg-yellow-400 hover:text-black transition-all cursor-pointer"
+                  >
+                    <p className="font-semibold text-white">{idx + 1}. {f.name}</p>
+                    <p className="text-sm text-white/70">{f.email}</p>
+                    <p className="text-sm font-bold text-green-400">{randomPoints} pts</p>
+                  </motion.div>
+                );
+              })}
             </div>
           )}
         </Card>
