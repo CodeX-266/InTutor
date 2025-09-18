@@ -139,22 +139,58 @@ const Dashboard = () => {
           </div>
         </motion.section>
 
+        
         {/* Leaderboard Section */}
-        <motion.section initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.9 }} className="mt-12">
-          <h2 className="text-3xl font-bold text-center mb-6 text-yellow-400">🏆 Friends Leaderboard</h2>
+        <motion.section
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.9 }}
+          className="mt-12"
+        >
+          <h2 className="text-3xl font-bold text-center mb-6 text-yellow-400">
+            🏆 Friends Leaderboard
+          </h2>
           <div className="space-y-3 max-w-md mx-auto">
             {friendsData.length === 0 ? (
               <p className="text-center text-gray-300">No friends yet 😢</p>
             ) : (
-              friendsData.map((f, index) => (
-                <div key={f.uid} className="flex justify-between bg-gray-800 p-4 rounded-xl shadow hover:shadow-lg transition-all">
-                  <span>{index + 1}. {f.name}</span>
-                  <span>{f.points} pts</span>
-                </div>
-              ))
+              (() => {
+                // Assign random points to friends
+                const friendsWithPoints = friendsData.map((f) => ({
+                  ...f,
+                  points: Math.floor(Math.random() * 1000),
+                }));
+
+                // Optionally include the current user with points
+                const user = auth.currentUser;
+                const currentUserData = user
+                  ? { uid: user.uid, name: user.displayName || "You", points: Math.floor(Math.random() * 1000) }
+                  : null;
+
+                // Combine current user + friends and sort descending
+                const allUsers = currentUserData
+                  ? [currentUserData, ...friendsWithPoints]
+                  : [...friendsWithPoints];
+                allUsers.sort((a, b) => b.points - a.points);
+
+                return allUsers.map((f, index) => (
+                  <div
+                    key={f.uid}
+                    className={`flex justify-between p-4 rounded-xl shadow transition-all ${
+                      f.uid === user?.uid
+                        ? "bg-yellow-500 text-black font-bold"
+                        : "bg-gray-800 text-white hover:shadow-lg"
+                    }`}
+                  >
+                    <span>{index + 1}. {f.name}</span>
+                    <span>{f.points} pts</span>
+                  </div>
+                ));
+              })()
             )}
           </div>
         </motion.section>
+
       </main>
     </div>
   );
