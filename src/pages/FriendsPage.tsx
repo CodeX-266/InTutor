@@ -93,12 +93,12 @@ export default function FriendsPage() {
     toast.error("Friend request rejected");
   };
 
-  // 🔹 Listen to friends
+  // 🔹 Listen to friends and their points for leaderboard
   useEffect(() => {
     if (!user) return;
 
     const userRef = doc(db, "users", user.uid);
-    const unsub = onSnapshot(userRef, (docSnap) => {
+    const unsub = onSnapshot(userRef, async (docSnap) => {
       if (docSnap.exists()) {
         const data = docSnap.data();
         if (data?.friends?.length) {
@@ -106,10 +106,11 @@ export default function FriendsPage() {
             collection(db, "users"),
             where("uid", "in", data.friends)
           );
-          getDocs(friendsQuery).then((snap) => {
-            const friendsData = snap.docs.map((d) => d.data());
-            setFriends(friendsData);
-          });
+          const snap = await getDocs(friendsQuery);
+          const friendsData = snap.docs.map((d) => d.data());
+          // Sort by points descending
+          friendsData.sort((a, b) => (b.points || 0) - (a.points || 0));
+          setFriends(friendsData);
         } else {
           setFriends([]);
         }
@@ -123,7 +124,7 @@ export default function FriendsPage() {
     <section className="py-20 px-6 bg-gradient-to-br from-green-900 via-blue-900 to-purple-900 min-h-screen text-white">
       <div className="max-w-4xl mx-auto space-y-10">
         <h2 className="text-5xl font-bold text-center text-white drop-shadow-lg">
-          Friends & Requests
+          Friends & Leaderboard
         </h2>
 
         {/* Search Users */}
@@ -178,22 +179,23 @@ export default function FriendsPage() {
           ))}
         </Card>
 
-        {/* Friends List */}
+        {/* Friends List & Leaderboard */}
         <Card className="p-6 bg-black/50 backdrop-blur-md shadow-lg border border-white/10 rounded-xl">
-          <h3 className="text-2xl font-semibold mb-4 text-white">Your Friends</h3>
+          <h3 className="text-2xl font-semibold mb-4 text-white">Your Friends & Leaderboard</h3>
           {friends.length === 0 ? (
             <p className="text-white">You don’t have friends yet 😢</p>
           ) : (
-            <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
-              {friends.map((f) => (
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {friends.map((f, idx) => (
                 <motion.div
                   key={f.uid}
                   initial={{ scale: 0.8, opacity: 0 }}
                   animate={{ scale: 1, opacity: 1 }}
                   className="p-4 bg-black/30 rounded-lg text-center border border-white/20 hover:bg-yellow-400 hover:text-black transition-all cursor-pointer"
                 >
-                  <p className="font-semibold text-white">{f.name}</p>
+                  <p className="font-semibold text-white">{idx + 1}. {f.name}</p>
                   <p className="text-sm text-white/70">{f.email}</p>
+                  <p className="text-sm font-bold text-green-400">{f.points || 0} pts</p>
                 </motion.div>
               ))}
             </div>

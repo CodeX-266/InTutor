@@ -7,13 +7,16 @@ import { GameCard } from "@/components/ui/game-card";
 import { BadgeDisplay } from "@/components/ui/badge-display";
 import { Progress } from "@/components/ui/progress";
 import { Trash2, Brain, Zap, Droplets, Sun, Gamepad2 } from "lucide-react";
+import { auth, db } from "@/firebase";
+import { doc, getDoc, collection, query, where, getDocs } from "firebase/firestore";
 import "@fontsource/poppins";
 
 const Dashboard = () => {
   const navigate = useNavigate();
-  const [userPoints, setUserPoints] = useState(150); 
-  const [userName, setUserName] = useState("Eco Explorer");
+  const [userPoints, setUserPoints] = useState(0); 
+  const [userName, setUserName] = useState("");
   const [currentQuote, setCurrentQuote] = useState(0);
+  const [friendsData, setFriendsData] = useState<any[]>([]);
 
   const ecoQuotes = [
     "Every small action makes a BIG difference! 🌱",
@@ -40,11 +43,40 @@ const Dashboard = () => {
     { id: "recycling-champion", name: "Recycling Champion", icon: "♻️", description: "Sort 100 items correctly", earned: false, requiredPoints: 0 },
   ];
 
+  // Rotate quotes
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentQuote((prev) => (prev + 1) % ecoQuotes.length);
     }, 4000);
     return () => clearInterval(interval);
+  }, []);
+
+  // Fetch current user points and friends for leaderboard
+  useEffect(() => {
+    const fetchUserData = async () => {
+      if (!auth.currentUser) return;
+
+      const userRef = doc(db, "users", auth.currentUser.uid);
+      const userSnap = await getDoc(userRef);
+      const userData = userSnap.data();
+
+      if (userData) {
+        setUserPoints(userData.points || 0);
+        setUserName(userData.name || "Eco Explorer");
+
+        // Fetch friends points
+        const friendsIds = userData.friends || [];
+        if (friendsIds.length > 0) {
+          const q = query(collection(db, "users"), where("uid", "in", [...friendsIds, auth.currentUser.uid]));
+          const snap = await getDocs(q);
+          const data = snap.docs.map(doc => doc.data());
+          data.sort((a, b) => b.points - a.points);
+          setFriendsData(data);
+        }
+      }
+    };
+
+    fetchUserData();
   }, []);
 
   const currentLevel = Math.floor(userPoints / 100) + 1;
@@ -85,7 +117,6 @@ const Dashboard = () => {
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
             {games.map((game, index) => (
               <motion.div key={game.id} initial={{ opacity: 0, y: 50 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 * index }}>
-                {/* Wrap GameCard in styled div for hover effects */}
                 <div className="bg-gray-800 hover:bg-gray-700 hover:shadow-xl hover:scale-105 transition-all rounded-xl border border-gray-700 p-4">
                   <GameCard
                     title={game.title}
@@ -105,6 +136,23 @@ const Dashboard = () => {
         <motion.section initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.6 }}>
           <div className="bg-gray-800 p-6 rounded-xl shadow-md hover:shadow-lg transition-all">
             <BadgeDisplay badges={badges} userPoints={userPoints} />
+          </div>
+        </motion.section>
+
+        {/* Leaderboard Section */}
+        <motion.section initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.9 }} className="mt-12">
+          <h2 className="text-3xl font-bold text-center mb-6 text-yellow-400">🏆 Friends Leaderboard</h2>
+          <div className="space-y-3 max-w-md mx-auto">
+            {friendsData.length === 0 ? (
+              <p className="text-center text-gray-300">No friends yet 😢</p>
+            ) : (
+              friendsData.map((f, index) => (
+                <div key={f.uid} className="flex justify-between bg-gray-800 p-4 rounded-xl shadow hover:shadow-lg transition-all">
+                  <span>{index + 1}. {f.name}</span>
+                  <span>{f.points} pts</span>
+                </div>
+              ))
+            )}
           </div>
         </motion.section>
       </main>

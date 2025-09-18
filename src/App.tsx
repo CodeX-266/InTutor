@@ -1,6 +1,5 @@
 import { FC } from "react";
-import { Toaster } from "@/components/ui/toaster";
-import { Toaster as Sonner } from "@/components/ui/sonner";
+import { Toaster } from "react-hot-toast"; // ✅ React Hot Toast
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
@@ -28,8 +27,9 @@ const queryClient = new QueryClient();
 const App: FC = () => (
   <QueryClientProvider client={queryClient}>
     <TooltipProvider>
-      <Toaster />
-      <Sonner />
+      {/* React Hot Toast Notifications */}
+      <Toaster position="top-right" reverseOrder={false} />
+
       <BrowserRouter>
         <Routes>
           {/* Landing page */}
@@ -59,10 +59,7 @@ const App: FC = () => (
           <Route path="/friends" element={<FriendsPage />} />
 
           {/* Games */}
-          <Route
-            path="/games/trash-collector"
-            element={<TrashCollectorGame />}
-          />
+          <Route path="/games/trash-collector" element={<TrashCollectorGame />} />
           <Route path="/games/solar-builder" element={<SolarBuilderGame />} />
           <Route path="/games/eco-quiz" element={<EcoQuizGame />} />
 
