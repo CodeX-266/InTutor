@@ -184,9 +184,10 @@ export default function FriendsPage() {
             <p className="text-white">You don’t have friends yet 😢</p>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {friends.map((f, idx) => {
-                const randomPoints = Math.floor(Math.random() * 1000); // Random points
-                return (
+              {friends
+                .map((f) => ({ ...f, points: Math.floor(Math.random() * 1000) })) // Assign random points
+                .sort((a, b) => b.points - a.points) // Sort descending by points
+                .map((f, idx) => (
                   <motion.div
                     key={f.uid}
                     initial={{ scale: 0.8, opacity: 0 }}
@@ -195,13 +196,13 @@ export default function FriendsPage() {
                   >
                     <p className="font-semibold text-white">{idx + 1}. {f.name}</p>
                     <p className="text-sm text-white/70">{f.email}</p>
-                    <p className="text-sm font-bold text-green-400">{randomPoints} pts</p>
+                    <p className="text-sm font-bold text-green-400">{f.points} pts</p>
                   </motion.div>
-                );
-              })}
+                ))}
             </div>
           )}
         </Card>
+
       </div>
     </section>
   );
