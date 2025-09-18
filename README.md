@@ -61,3 +61,6 @@ Add screenshots or GIFs here to show your dashboard, friends page, or games.
 ```bash
 git clone https://github.com/yourusername/intutor.git
 cd intutor
+
+[View Presentation](https://docs.google.com/presentation/d/1vifk3-Mdweoe3oRAyU7wBc5bZDSSdt3q/edit?usp=sharing)
+
