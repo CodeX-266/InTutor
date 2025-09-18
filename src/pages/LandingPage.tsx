@@ -7,6 +7,10 @@ import { Button } from "@/components/ui/button";
 import { Play, Users } from "lucide-react";
 import { auth } from "@/firebase";
 import { onAuthStateChanged, User as FirebaseUser } from "firebase/auth";
+import bgImage from "@/assets/background.jpg";
+
+
+
 
 const Landing: FC = () => {
   const navigate = useNavigate();
@@ -24,7 +28,7 @@ const Landing: FC = () => {
     <div
       className="relative flex flex-col items-center justify-start h-screen w-screen overflow-hidden font-inter"
       style={{
-        backgroundImage: `url("/public/image/background.jpg")`,
+        backgroundImage: `url("${bgImage}")`,
         backgroundSize: "cover",
         backgroundPosition: "center",
         minHeight: "100vh",
