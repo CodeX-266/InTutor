@@ -1,73 +1,63 @@
-# Welcome to your Lovable project
+# InTutor 🌱
 
-## Project info
+**InTutor** is an interactive, eco-themed educational platform that combines learning, gaming, and social features. Users can explore courses, play educational games, compete with friends, earn badges, and track their progress on a visually appealing dashboard.
 
-**URL**: https://lovable.dev/projects/8fa4fc8b-1114-4151-a3f0-c116339676f7
+---
 
-## How can I edit this code?
+## Features
 
-There are several ways of editing your application.
+### 🎓 Learning
+- Browse educational courses on various topics.
+- Interactive learning pages for selected topics.
+- Quizzes to test knowledge.
 
-**Use Lovable**
+### 🕹 Games
+- Play eco-themed games like:
+  - **Trash Collector**: Sort waste into bins.
+  - **Solar Builder**: Build solar panels and power the city.
+  - **Eco Quiz Adventure**: Test your environmental knowledge.
+- Earn points for completing games.
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/8fa4fc8b-1114-4151-a3f0-c116339676f7) and start prompting.
+### 👥 Friends & Leaderboard
+- Search and add friends using their email.
+- Send, accept, and reject friend requests.
+- Track friends’ points and compete on the leaderboard.
 
-Changes made via Lovable will be committed automatically to this repo.
+### 🏆 Badges & Achievements
+- Earn badges for completing milestones.
+- Dynamic badge display with glowing, animated effects.
 
-**Use your preferred IDE**
+### 🌎 Dashboard
+- Beautiful, animated, dark aesthetic dashboard.
+- Tracks user points, level progression, and achievements.
+- Display rotating eco-friendly quotes for motivation.
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+### 🔔 Notifications
+- Real-time notifications using **react-hot-toast**.
+- Celebrate milestones with animations.
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+---
 
-Follow these steps:
+## Demo
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+Add screenshots or GIFs here to show your dashboard, friends page, or games.
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+---
 
-# Step 3: Install the necessary dependencies.
-npm i
+## Tech Stack
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
-npm run dev
-```
+- **Frontend**: React, TypeScript, Tailwind CSS, Framer Motion  
+- **Routing & State**: React Router, React Query  
+- **Backend**: Firebase (Auth, Firestore)  
+- **Notifications**: react-hot-toast  
+- **Icons**: Lucide React  
 
-**Edit a file directly in GitHub**
+---
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+## Installation
 
-**Use GitHub Codespaces**
+1. Clone the repository:
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
-
-## What technologies are used for this project?
-
-This project is built with:
-
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
-
-## How can I deploy this project?
-
-Simply open [Lovable](https://lovable.dev/projects/8fa4fc8b-1114-4151-a3f0-c116339676f7) and click on Share -> Publish.
-
-## Can I connect a custom domain to my Lovable project?
-
-Yes, you can!
-
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
-
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)
+```bash
+git clone https://github.com/yourusername/intutor.git
+cd intutor
