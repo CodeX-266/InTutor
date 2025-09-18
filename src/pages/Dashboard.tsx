@@ -139,7 +139,6 @@ const Dashboard = () => {
           </div>
         </motion.section>
 
-        
         {/* Leaderboard Section */}
         <motion.section
           initial={{ opacity: 0 }}
@@ -155,14 +154,18 @@ const Dashboard = () => {
               <p className="text-center text-gray-300">No friends yet 😢</p>
             ) : (
               (() => {
+                const user = auth.currentUser;
+
+                // Filter out the logged-in user from friendsData
+                const friendsWithoutUser = friendsData.filter(f => f.uid !== user?.uid);
+
                 // Assign random points to friends
-                const friendsWithPoints = friendsData.map((f) => ({
+                const friendsWithPoints = friendsWithoutUser.map(f => ({
                   ...f,
                   points: Math.floor(Math.random() * 1000),
                 }));
 
-                // Optionally include the current user with points
-                const user = auth.currentUser;
+                // Assign random points to the current user
                 const currentUserData = user
                   ? { uid: user.uid, name: user.displayName || "You", points: Math.floor(Math.random() * 1000) }
                   : null;
