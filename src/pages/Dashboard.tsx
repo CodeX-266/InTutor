@@ -133,17 +133,50 @@ const Dashboard = () => {
         </motion.section>
 
         {/* Badges Section */}
-        <motion.section initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.6 }}>
-          <div className="bg-gray-800 p-6 rounded-xl shadow-md hover:shadow-lg transition-all">
-            <BadgeDisplay badges={badges} userPoints={userPoints} />
+        <motion.section
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.6 }}
+        >
+          <div className="bg-gray-900/80 backdrop-blur-lg p-8 rounded-2xl shadow-2xl hover:shadow-[0_0_30px_rgba(72,187,120,0.6)] transition-all duration-500 border border-gray-700">
+            <h2 className="text-3xl font-extrabold text-white mb-6 text-center tracking-wide drop-shadow-lg">
+              🏆 Your Badges
+            </h2>
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-6">
+              {badges.map((badge) => (
+                <div
+                  key={badge.id}
+                  className={`flex flex-col items-center justify-center p-4 rounded-xl border-2 ${
+                    badge.earned
+                      ? "border-green-400 bg-gradient-to-br from-green-900 via-green-800 to-green-900"
+                      : "border-gray-600 bg-gray-800/40"
+                  } shadow-lg hover:scale-105 hover:border-green-400 transition-all duration-300 cursor-pointer`}
+                >
+                  <div
+                    className={`text-4xl mb-2 ${
+                      badge.earned ? "animate-pulse" : "opacity-60"
+                    }`}
+                  >
+                    {badge.icon}
+                  </div>
+                  <p className="font-semibold text-white text-center text-sm">
+                    {badge.name}
+                  </p>
+                  <p className="text-xs text-gray-400 text-center mt-1">
+                    {badge.description}
+                  </p>
+                </div>
+              ))}
+            </div>
           </div>
         </motion.section>
+
 
         {/* Leaderboard Section */}
         <motion.section
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ delay: 0.9 }}
+          transition={{ delay: 5.0 }}
           className="mt-12"
         >
           <h2 className="text-3xl font-bold text-center mb-6 text-yellow-400">
