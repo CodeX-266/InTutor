@@ -1,6 +1,8 @@
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { useNavigate } from "react-router-dom";
+
 import climateImage from "@/assets/climate-change.jpg";
 import renewableImage from "@/assets/renewable-energy.jpg";
 import wasteImage from "@/assets/waste-management.jpg"; 
@@ -58,8 +60,10 @@ const getDifficultyColor = (difficulty: Topic["difficulty"]) => {
 };
 
 export const TopicsGrid = () => {
+  const navigate = useNavigate();
+
   return (
-    <section className="py-20 px-6 bg-gray-900">
+    <section className="py-20 px-6 bg-gray-900 min-h-screen">
       <div className="max-w-7xl mx-auto">
         {/* Heading */}
         <div className="text-center mb-16">
@@ -71,27 +75,26 @@ export const TopicsGrid = () => {
             <span className="text-white"> Topics</span>
           </h2>
           <p className="text-lg md:text-xl text-gray-300 max-w-3xl mx-auto">
-            Dive deep into critical environmental issues with our interactive, 
-            multimedia-rich learning experiences designed for the modern student.
+            Dive deep into critical environmental issues with our interactive, multimedia-rich learning experiences designed for the modern student.
           </p>
         </div>
 
         {/* Topics Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {topics.map((topic, index) => (
-            <Card 
-              key={topic.id} 
+            <Card
+              key={topic.id}
               className="group bg-gray-800 border border-gray-700 hover:border-blue-500 transition-all duration-500 hover:shadow-xl overflow-hidden animate-fade-in"
               style={{ animationDelay: `${index * 0.1}s` }}
             >
-              <div className="relative overflow-hidden">
-                <img 
-                  src={topic.image} 
+              <div className="relative overflow-hidden rounded-t-lg">
+                <img
+                  src={topic.image}
                   alt={`${topic.title} educational content`}
                   className="w-full h-48 object-cover transition-transform duration-500 group-hover:scale-110"
                 />
-                <div className="absolute inset-0 bg-black/40 group-hover:bg-black/20 transition-all duration-500" />
-                <Badge 
+                <div className="absolute inset-0 bg-black/40 group-hover:bg-black/20 transition-all duration-500 rounded-t-lg" />
+                <Badge
                   className={`absolute top-4 right-4 ${getDifficultyColor(topic.difficulty)} border-0 font-semibold`}
                 >
                   {topic.difficulty}
@@ -102,7 +105,7 @@ export const TopicsGrid = () => {
                 <h3 className="text-2xl font-bold text-white group-hover:text-blue-400 transition-colors">
                   {topic.title}
                 </h3>
-                
+
                 <p className="text-gray-300 text-sm leading-relaxed">
                   {topic.description}
                 </p>
@@ -113,9 +116,10 @@ export const TopicsGrid = () => {
                   <span>{topic.duration}</span>
                 </div>
 
-                <Button 
-                  variant="outline" 
+                <Button
+                  variant="outline"
                   className="w-full text-white border-gray-500 hover:border-blue-400 hover:bg-blue-500/10 transition-all duration-300"
+                  onClick={() => navigate(`/courses/${topic.id}`)} // Navigate to Learning Page for the topic
                 >
                   Start Learning
                 </Button>

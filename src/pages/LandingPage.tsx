@@ -4,9 +4,7 @@ import { useNavigate } from "react-router-dom";
 import "@fontsource/cinzel-decorative";
 import "@fontsource/inter"; // Professional font
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
-import { Play, Users, Trophy, BookOpen, Gamepad2, Star } from "lucide-react";
-import { EarthMascot } from "@/components/mascot/EarthMascot";
+import { Play, Users } from "lucide-react";
 import { auth } from "@/firebase";
 import { onAuthStateChanged, User as FirebaseUser } from "firebase/auth";
 
@@ -21,40 +19,6 @@ const Landing: FC = () => {
     });
     return () => unsubscribe();
   }, []);
-
-  // Features data
-  const features = [
-    {
-      icon: <Gamepad2 className="w-8 h-8" />,
-      title: "6 Interactive Games",
-      description: "Trash sorting, solar building, eco quizzes, and more!",
-    },
-    {
-      icon: <Trophy className="w-8 h-8" />,
-      title: "Badges & Rewards",
-      description: "Earn achievements and climb the leaderboards",
-    },
-    {
-      icon: <BookOpen className="w-8 h-8" />,
-      title: "Learn Real Science",
-      description: "Climate change, recycling, renewable energy basics",
-    },
-    {
-      icon: <Users className="w-8 h-8" />,
-      title: "Student & Teacher Accounts",
-      description: "Track progress and compete with classmates",
-    },
-  ];
-
-  // Games data with routes
-  const games = [
-    { name: "Trash Collector", emoji: "🗑️", route: "/games/trash-collector" },
-    { name: "Solar Builder", emoji: "☀️", route: "/games/solar-builder" },
-    { name: "Eco Quiz", emoji: "🧠", route: "/games/eco-quiz" },
-    { name: "Water Saver", emoji: "💧", route: "/games/water-saver" },
-    { name: "Carbon Runner", emoji: "🏃", route: "/games/carbon-runner" },
-    { name: "Climate Defender", emoji: "🌍", route: "/games/climate-defender" },
-  ];
 
   return (
     <div
@@ -82,6 +46,12 @@ const Landing: FC = () => {
               className="hover:text-green-300 transition-colors"
             >
               Courses
+            </button>
+            <button
+              onClick={() => navigate("/friends")}
+              className="hover:text-green-300 transition-colors flex items-center gap-1"
+            >
+              <Users className="w-5 h-5" /> Friends
             </button>
             <button
               onClick={() => navigate("/about")}

@@ -8,8 +8,9 @@ import { useNavigate } from "react-router-dom";
 import { EarthMascot } from "@/components/mascot/EarthMascot";
 import { ArrowLeft, Mail, Lock, User, School } from "lucide-react";
 
-import { auth } from "@/firebase";
+import { auth, db } from "@/firebase";
 import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
+import { doc, setDoc, serverTimestamp } from "firebase/firestore";
 import { useState } from "react";
 
 const SignupPage = () => {
@@ -42,14 +43,20 @@ const SignupPage = () => {
       // Firebase Auth: create user
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
 
-      // Update displayName
       if (userCredential.user) {
-        await updateProfile(userCredential.user, {
-          displayName: name,
+        // Update displayName in Auth
+        await updateProfile(userCredential.user, { displayName: name });
+
+        // Save user details in Firestore
+        await setDoc(doc(db, "users", userCredential.user.uid), {
+          uid: userCredential.user.uid,
+          name,
+          email,
+          role,
+          school,
+          createdAt: serverTimestamp(),
         });
       }
-
-      // Optional: save role, school to Firestore here
 
       navigate("/dashboard");
     } catch (error: any) {
@@ -84,7 +91,7 @@ const SignupPage = () => {
               <EarthMascot size="md" animation="celebrate" />
             </div>
             <CardTitle className="text-3xl font-bold text-green-700">
-              Join EcoEduPlay!
+              Join InTutor!
             </CardTitle>
             <p className="text-muted-foreground">
               Start your journey to becoming an eco-hero
@@ -185,25 +192,6 @@ const SignupPage = () => {
                 {loading ? "Creating Account..." : "Create Account 🌍"}
               </Button>
             </form>
-
-            {/* Sign In Link & Demo */}
-            <div className="text-center space-y-4">
-              <p className="text-sm text-muted-foreground">
-                Already have an account?{" "}
-                <button
-                  onClick={() => navigate("/login")}
-                  className="text-green-600 hover:text-green-700 font-medium"
-                >
-                  Sign in here
-                </button>
-              </p>
-
-              <div className="bg-blue-50 p-4 rounded-lg border border-blue-200">
-                <p className="text-sm text-blue-700">
-                  <strong>Demo Access:</strong> Click "Create Account" to try the demo instantly!
-                </p>
-              </div>
-            </div>
           </CardContent>
         </Card>
       </motion.div>
